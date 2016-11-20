@@ -3,6 +3,7 @@
 
 #include "numeric.h"
 #include "data_structures/van_emde_boas_set.h"
+#include "data_structures/avl_tree.h"
 
 CELERO_MAIN
 
@@ -63,5 +64,19 @@ BENCHMARK_F(InsertPopMin, VanEmdeBoas, QueriesFixture, samples, iterations)
     set.insert(value2);
 
     set.erase(set.first());
+  }
+}
+
+BENCHMARK_F(InsertPopMin, avl_tree, QueriesFixture, samples, iterations)
+{
+  avl::ValueNode::node_pointer tree = nullptr;
+  for (auto it = queries.begin(); it != queries.end(); ) {
+    auto value1 = *it++;
+    auto value2 = *it++;
+
+    tree = avl::insert(tree, value1);
+    tree = avl::insert(tree, value2);
+
+    tree = avl::erase(avl::first(tree));
   }
 }
